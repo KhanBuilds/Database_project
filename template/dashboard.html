@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block header %}Dashboard{% endblock %}
+
+{% block content %}
+<h3>Registered Students</h3>
+<ul>
+    {% for s in students %}
+        <li>{{ s.name }} (ID: {{ s.student_id }}) - {{ s.email }}</li>
+    {% else %}
+        <li class="muted">No students registered yet.</li>
+    {% endfor %}
+</ul>
+
+<h3>Registered Faculty</h3>
+<ul>
+    {% for f in faculty %}
+        <li>{{ f.name }} - {{ f.department }}</li>
+    {% else %}
+        <li class="muted">No faculty registered yet.</li>
+    {% endfor %}
+</ul>
+
+<h3>Available Books</h3>
+<ul>
+    {% for b in books %}
+        <li>
+            {{ b.title }} (ID: {{ b.book_id }}) - Author: {{ b.author }}
+            {% if b.available == 0 %}
+                [ALL BORROWED]
+            {% else %}
+                ({{ b.available }} available)
+            {% endif %}
+        </li>
+    {% else %}
+        <li class="muted">No books available.</li>
+    {% endfor %}
+</ul>
+
+<h3>Borrowed Books</h3>
+<ul>
+    {% for bb in borrowed_books %}
+        <li>{{ bb.borrower_identifier }} borrowed {{ bb.book.title }} (Book ID: {{ bb.book_id }})</li>
+    {% else %}
+        <li class="muted">No borrowed books yet.</li>
+    {% endfor %}
+</ul>
+
+<a class="btn secondary" href="/">Back to Home</a>
+{% endblock %}

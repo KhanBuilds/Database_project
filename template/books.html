@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Book Management{% endblock %}
+{% block header %}Book Management{% endblock %}
+
+{% block content %}
+<div class="actions">
+    <a class="btn" href="/library/books/add">Add New Book</a>
+    <a class="btn secondary" href="/dashboard">Back to Dashboard</a>
+</div>
+
+<form method="GET" action="/library/books">
+    <input type="text" name="q" placeholder="Search books" value="{{ query }}">
+    <select name="field">
+        <option value="title" {% if field == 'title' %}selected{% endif %}>Title</option>
+        <option value="author" {% if field == 'author' %}selected{% endif %}>Author</option>
+        <option value="category" {% if field == 'category' %}selected{% endif %}>Category</option>
+        <option value="isbn" {% if field == 'isbn' %}selected{% endif %}>ISBN</option>
+    </select>
+    <select name="sort">
+        <option value="title" {% if sort == 'title' %}selected{% endif %}>Sort by Title</option>
+        <option value="author" {% if sort == 'author' %}selected{% endif %}>Sort by Author</option>
+    </select>
+    <button class="btn" type="submit">Search</button>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Category</th>
+            <th>Quantity</th>
+            <th>Available</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for b in books %}
+            <tr>
+                <td>{{ b.book_id }}</td>
+                <td>{{ b.title }}</td>
+                <td>{{ b.author }}</td>
+                <td>{{ b.category or '-' }}</td>
+                <td>{{ b.quantity }}</td>
+                <td>{{ b.available }}</td>
+                <td>
+                    <a class="btn" href="/library/books/edit/{{ b.book_id }}">Edit</a>
+                    <a class="btn secondary" href="/library/books/delete/{{ b.book_id }}">Delete</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7" class="muted">No books found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

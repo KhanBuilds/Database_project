@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Faculty Registration{% endblock %}
+{% block header %}Faculty Registration{% endblock %}
+
+{% block content %}
+{% if success %}
+<div class="success">{{ success }}</div>
+<div class="actions">
+    <a class="btn" href="/reg/faculty">Add Another</a>
+    <a class="btn secondary" href="/">Back Home</a>
+</div>
+{% else %}
+<form method="POST">
+    <div>
+        <label>Name</label>
+        <input type="text" name="name" required>
+    </div>
+    <div>
+        <label>Email</label>
+        <input type="email" name="email" required>
+    </div>
+    <div>
+        <label>Employee ID</label>
+        <input type="text" name="eid" required>
+    </div>
+    <div>
+        <label>Department</label>
+        <input type="text" name="dept" required>
+    </div>
+    <div>
+        <label>Password</label>
+        <input type="password" name="password" required>
+    </div>
+    <button class="btn" type="submit">Register</button>
+    <a class="btn secondary" href="/">Back</a>
+</form>
+{% endif %}
+{% endblock %}

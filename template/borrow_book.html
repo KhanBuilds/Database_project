@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Borrow Book{% endblock %}
+{% block header %}Borrow Book{% endblock %}
+
+{% block content %}
+{% if error %}
+<div class="error">{{ error }}</div>
+{% endif %}
+
+{% if success %}
+<div class="success">{{ success }}</div>
+<div class="actions">
+    <a class="btn" href="/library/borrow">Borrow Another</a>
+    <a class="btn secondary" href="/dashboard">View Dashboard</a>
+</div>
+{% else %}
+<form method="POST">
+    <input type="text" name="borrower_identifier" placeholder="Borrower ID" required>
+    <input type="number" name="book_id" placeholder="Book ID" required>
+    <button class="btn" type="submit">Borrow Book</button>
+    <a class="btn secondary" href="/">Cancel</a>
+</form>
+{% endif %}
+{% endblock %}

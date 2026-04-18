@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Book{% endblock %}
+{% block header %}Edit Book{% endblock %}
+
+{% block content %}
+{% if error %}
+<div class="error">{{ error }}</div>
+{% endif %}
+
+{% if book %}
+<form method="POST">
+    <input type="text" name="title" value="{{ book.title }}" placeholder="Book Title" required>
+    <input type="text" name="author" value="{{ book.author }}" placeholder="Author" required>
+    <input type="text" name="category" value="{{ book.category or '' }}" placeholder="Category">
+    <input type="text" name="publisher" value="{{ book.publisher or '' }}" placeholder="Publisher">
+    <input type="number" name="year" value="{{ book.year or '' }}" placeholder="Year">
+    <input type="number" name="quantity" value="{{ book.quantity }}" placeholder="Total Quantity" required>
+    <button class="btn" type="submit">Update Book</button>
+    <a class="btn secondary" href="/library/books">Cancel</a>
+</form>
+{% else %}
+<a class="btn secondary" href="/library/books">Back to Book Management</a>
+{% endif %}
+{% endblock %}
