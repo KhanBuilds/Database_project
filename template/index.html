@@ -4,12 +4,14 @@
 {% block header %}University Portal{% endblock %}
 
 {% block content %}
-<p class="muted">Welcome! Manage student and faculty registrations from here.</p>
+<p class="muted">Welcome! Manage student and faculty registrations, library books, and member records from here.</p>
 <div class="actions">
     <a class="btn" href='/reg/student'>Student Registration</a>
     <a class="btn" href='/reg/faculty'>Faculty Registration</a>
     <a class="btn" href='/library/books'>Book Management</a>
     <a class="btn" href='/library/borrow'>Borrow Books</a>
+    <a class="btn" href='/members'>View Members</a>
+    <a class="btn" href='/library/issue'>Issue Books</a>
     <a class="btn secondary" href='/dashboard'>Dashboard</a>
 </div>
 {% endblock %}

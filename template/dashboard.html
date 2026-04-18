@@ -47,5 +47,14 @@
     {% endfor %}
 </ul>
 
+<h3>Members</h3>
+<ul>
+    {% for m in members %}
+        <li>{{ m.name }} - {{ m.email }} ({{ m.phone_number }})</li>
+    {% else %}
+        <li class="muted">No members registered yet.</li>
+    {% endfor %}
+</ul>
+
 <a class="btn secondary" href="/">Back to Home</a>
 {% endblock %}

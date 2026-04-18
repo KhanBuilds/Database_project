@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Issued Books{% endblock %}
+{% block header %}Issued Books{% endblock %}
+
+{% block content %}
+<div class="actions">
+    <a class="btn" href="/library/issue">Issue New Book</a>
+    <a class="btn secondary" href="/dashboard">Back to Dashboard</a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Member Name</th>
+            <th>Book Title</th>
+            <th>Author</th>
+            <th>Issue Date</th>
+            <th>Due Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for issue in issues %}
+            <tr>
+                <td>{{ issue.member.name }}</td>
+                <td>{{ issue.book.title }}</td>
+                <td>{{ issue.book.author }}</td>
+                <td>{{ issue.issue_date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ issue.due_date }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" class="muted">No books issued yet.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

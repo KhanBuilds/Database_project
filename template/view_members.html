@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Members{% endblock %}
+{% block header %}Members{% endblock %}
+
+{% block content %}
+<div class="actions">
+    <a class="btn" href="/members/add">Add New Member</a>
+    <a class="btn secondary" href="/dashboard">Back to Dashboard</a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for member in members %}
+            <tr>
+                <td>{{ member.id }}</td>
+                <td>{{ member.name }}</td>
+                <td>{{ member.email }}</td>
+                <td>{{ member.phone_number }}</td>
+                <td>
+                    <a class="btn" href="/members/edit/{{ member.id }}">Edit</a>
+                    <a class="btn secondary" href="/members/delete/{{ member.id }}">Delete</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" class="muted">No members registered yet.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

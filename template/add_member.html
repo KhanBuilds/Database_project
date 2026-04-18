@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Add Member{% endblock %}
+{% block header %}Add Member{% endblock %}
+
+{% block content %}
+{% if error %}
+<div class="error">{{ error }}</div>
+{% endif %}
+
+<form method="POST">
+    <div>
+        <label>Name</label>
+        <input type="text" name="name" placeholder="Full Name" required>
+    </div>
+    <div>
+        <label>Email</label>
+        <input type="email" name="email" placeholder="Email Address" required>
+    </div>
+    <div>
+        <label>Phone Number</label>
+        <input type="tel" name="Phone Number" placeholder="Phone Number" required>
+    </div>
+    <button class="btn" type="submit">Add Member</button>
+    <a class="btn secondary" href="/members">Cancel</a>
+</form>
+{% endblock %}

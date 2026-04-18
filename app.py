@@ -5,8 +5,10 @@ from datetime import datetime
 import os
 from dotenv import load_dotenv
 
+load_dotenv()
+
 app = Flask(__name__, template_folder='template')
-app.config['SQLALCHEMY_DATABASE_URI']=os.getenv('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -85,6 +87,7 @@ def dashboard():
     faculty = Faculty.query.all()
     books = Book.query.all()
     borrowed_books = BorrowedBook.query.all()
+    members=Members.query.all()
 
     return render_template(
         'dashboard.html',
@@ -92,6 +95,7 @@ def dashboard():
         faculty=faculty,
         books=books,
         borrowed_books=borrowed_books,
+        members=members
     )
 @app.route('/library/books')
 def manage_books():
@@ -261,6 +265,7 @@ def borrow_books():
         borrower_identifier = request.form['borrower_identifier']
         book_id = int(request.form['book_id'])
 
+
         existing_borrower = BorrowedBook.query.filter_by(borrower_identifier=borrower_identifier).first()
         if existing_borrower:
             return render_template(
@@ -268,7 +273,21 @@ def borrow_books():
                 error=f'{borrower_identifier} already has a borrowed book. Limit is 1 book per person.',
                 success=None,
             )
-
+        
+        try:
+            borrower_id = int(borrower_identifier)
+            is_student = Student.query.filter_by(student_id=borrower_id).first()
+            is_member = Members.query.filter_by(id=borrower_id).first()
+        except ValueError:
+            is_student = None
+            is_member = Members.query.filter_by(email=borrower_identifier).first()
+        
+        if not is_student and not is_member:
+            return render_template(
+                'borrow_book.html',
+                error=f'{borrower_identifier} is not a registered student or member.',
+                success=None,
+            )
         book = Book.query.filter_by(book_id=book_id).first()
         if not book:
             return render_template(
@@ -347,7 +366,57 @@ def register_faculty():
 
     return render_template('register_faculty.html', success=None)
 
+@app.route('/members')
+def view_members():
+    all_members=Members.query.all()
+    return render_template('view_members.html', members=all_members)
 
+@app.route('/members/add', methods=['GET', 'POST'])
+def add_members():
+    if request.method == 'POST':
+        name = request.form['name']
+        email= request.form['email']
+        phone_number= request.form['Phone Number']
+        existing = Members.query.filter_by(email=email).first()
+        if existing:
+            return render_template('add_member.html', error='Email already exists.')
+        new_member=Members(name=name, email=email, phone_number=phone_number)
+        try:
+            db.session.add(new_member)
+            db.session.commit()
+            return redirect(url_for('view_members'))
+        except IntegrityError:
+            db.session.rollback()
+            return render_template('add_member.html', error='Email already exists.')
+    return render_template('add_member.html', error=None)
+
+@app.route('/library/issue', methods=['GET', 'POST'])
+def issue_books():
+    if request.method== 'POST':
+        m_id= request.form['member_id']
+        b_id= request.form['Book_id']
+        due_date_str = request.form['due_date']
+        
+        due_date = datetime.strptime(due_date_str, '%Y-%m-%d')
+        book=Book.query.get(b_id)
+        member=Members.query.get(m_id)
+        if not book or not member:
+            return "Invalid book or member Id", 400
+        if book.available==0:
+            return "Book not available", 400
+        new_issue=Issue(member_id=m_id, book_id=b_id, due_date=due_date_str)
+        book.available-=1
+        db.session.add(new_issue)
+        db.session.commit()
+        return redirect(url_for('view_issued_books'))
+    books = Book.query.filter(Book.available > 0).all()
+    members= Members.query.all()
+    return render_template('issue_book.html', members=members , books=books)
+@app.route('/library/issued-books')
+def view_issued_books():
+    # Task 3: Show table with Member Name and Book Title
+    issues = Issue.query.all()
+    return render_template('view_issued_books.html', issues=issues)
 
 if __name__ == '__main__':
     app.run(debug=True)

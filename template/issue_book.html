@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Issue Book{% endblock %}
+{% block header %}Issue Book to Member{% endblock %}
+
+{% block content %}
+{% if error %}
+<div class="error">{{ error }}</div>
+{% endif %}
+
+<form method="POST">
+    <div>
+        <label>Member</label>
+        <select name="member_id" required>
+            <option value="">-- Select Member --</option>
+            {% for member in members %}
+                <option value="{{ member.id }}">{{ member.name }} (ID: {{ member.id }})</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label>Book</label>
+        <select name="Book_id" required>
+            <option value="">-- Select Book --</option>
+            {% for book in books %}
+                <option value="{{ book.book_id }}">{{ book.title }} - {{ book.author }} (Available: {{ book.available }})</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label>Due Date</label>
+        <input type="date" name="due_date" required>
+    </div>
+    <button class="btn" type="submit">Issue Book</button>
+    <a class="btn secondary" href="/library/issued-books">View Issued Books</a>
+</form>
+{% endblock %}
