@@ -2,9 +2,11 @@ from flask import Flask, render_template, url_for, redirect, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime
+import os
+from dotenv import load_dotenv
 
 app = Flask(__name__, template_folder='template')
-app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:ray5191@localhost:5432/university_db'
+app.config['SQLALCHEMY_DATABASE_URI']=os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
