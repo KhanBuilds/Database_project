@@ -414,7 +414,6 @@ def issue_books():
     return render_template('issue_book.html', members=members , books=books)
 @app.route('/library/issued-books')
 def view_issued_books():
-    # Task 3: Show table with Member Name and Book Title
     issues = Issue.query.all()
     return render_template('view_issued_books.html', issues=issues)
 
